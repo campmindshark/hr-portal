@@ -1,0 +1,3 @@
+[global]
+port = 9292
+limits = { json = 10485760 }
