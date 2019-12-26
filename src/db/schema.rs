@@ -27,6 +27,7 @@ table! {
         playa_name -> Nullable<Varchar>,
         email -> Varchar,
         phone -> Varchar,
+        location -> Nullable<Varchar>,
         years_burned -> Int4,
         known_allergies -> Nullable<Array<Text>>,
         known_medications -> Nullable<Array<Text>>,
@@ -40,14 +41,9 @@ table! {
 table! {
     signups (id) {
         id -> Uuid,
+        member_id -> Uuid,
         year_id -> Uuid,
         attendance_probability -> Int4,
-        ticket_status -> Varchar,
-        extra_tickets -> Int4,
-        vehicle_pass -> Bool,
-        extra_vehicle_passes -> Int4,
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
         expected_arrival -> Timestamp,
         expected_departure -> Timestamp,
         sleeping_arrangement -> Varchar,
@@ -58,6 +54,24 @@ table! {
         will_pay_dues -> Bool,
         will_perform_duties -> Bool,
         will_tear_down -> Bool,
+        created_at -> Timestamptz,
+        updated_at -> Nullable<Timestamptz>,
+    }
+}
+
+table! {
+    ticket_information (id) {
+        id -> Uuid,
+        member_id -> Uuid,
+        year_id -> Uuid,
+        ticket_source_id -> Nullable<Uuid>,
+        ticket_status -> Varchar,
+        extra_tickets -> Int4,
+        vehicle_pass -> Bool,
+        extra_vehicle_passes -> Int4,
+        pool_participant -> Bool,
+        created_at -> Timestamptz,
+        updated_at -> Nullable<Timestamptz>,
     }
 }
 
@@ -86,7 +100,10 @@ table! {
 
 joinable!(email_invitations -> members (invited_by));
 joinable!(emergency_contacts -> members (member_id));
+joinable!(signups -> members (member_id));
 joinable!(signups -> year_configuration (year_id));
+joinable!(ticket_information -> members (member_id));
+joinable!(ticket_information -> year_configuration (year_id));
 joinable!(url_invitations -> members (invited_by));
 
 allow_tables_to_appear_in_same_query!(
@@ -94,6 +111,7 @@ allow_tables_to_appear_in_same_query!(
     emergency_contacts,
     members,
     signups,
+    ticket_information,
     url_invitations,
     year_configuration,
 );

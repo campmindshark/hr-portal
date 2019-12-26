@@ -1,5 +1,10 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
+#[macro_use]
+extern crate diesel;
+
+mod db;
+
 use log::info;
 
 fn configure_logging() -> Result<(), fern::InitError> {

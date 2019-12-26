@@ -10,14 +10,13 @@ lazy_static = "1.4"
 log = "0.4"
 
 chrono = "0.4"
-diesel = { version = "1.4", default-features = false, features = ["chrono", "postgres"] }
+diesel = { version = "1.4", default-features = false, features = ["chrono", "postgres", "uuid"] }
 diesel_migrations = "1.4"
 fern = { version = "0.5" }
 rocket = "0.4"
 
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-uuid = { version = "0.8", features = ["serde", "v4"] }
 
 # This needs to be explicitly specified for pulling in dependencies during a
 # container build before we've injected the entire project
