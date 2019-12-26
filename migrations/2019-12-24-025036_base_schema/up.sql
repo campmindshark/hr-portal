@@ -79,13 +79,13 @@ CREATE TABLE year_configuration (
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
+CREATE UNIQUE INDEX year_configuration_year ON year_configuration(year);
+
 DROP TRIGGER IF EXISTS update_timestamp ON year_configuration;
 CREATE TRIGGER update_timestamp
   BEFORE UPDATE ON year_configuration
   FOR EACH ROW
     EXECUTE PROCEDURE trigger_update_timestamp();
-
-CREATE UNIQUE INDEX year_configuration_year ON year_configuration(year);
 
 DROP TABLE IF EXISTS signups;
 CREATE TABLE signups (
@@ -100,22 +100,14 @@ CREATE TABLE signups (
   -- Considered using a DATE type here and that's probably all we'll ask about in the primary
   -- sign-up form but if we can get flight arrival times and the like we might be able to schedule
   -- rides between people with a solver...
-  expected_arrival TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  expected_departure TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  expected_arrival TIMESTAMP WITHOUT TIME ZONE,
+  expected_departure TIMESTAMP WITHOUT TIME ZONE,
 
   sleeping_arrangement VARCHAR(64) NOT NULL,
 
   -- These are ternary values and we can use 'NULL' as Maybe?
   willing_to_early_arrival BOOLEAN DEFAULT FALSE,
   willing_to_post_burn BOOLEAN DEFAULT FALSE,
-
-  -- Various checkboxes that should be confirmed every year...
-  read_essential_mindshark BOOLEAN NOT NULL DEFAULT FALSE,
-  read_project_descriptions BOOLEAN NOT NULL DEFAULT FALSE,
-
-  will_pay_dues BOOLEAN NOT NULL DEFAULT FALSE,
-  will_perform_duties BOOLEAN NOT NULL DEFAULT FALSE,
-  will_tear_down BOOLEAN NOT NULL DEFAULT FALSE,
 
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -128,6 +120,8 @@ CREATE TABLE signups (
     )
   )
 );
+
+CREATE UNIQUE INDEX signups_member_id_year_id ON signups(member_id, year_id);
 
 DROP TRIGGER IF EXISTS update_timestamp ON signups;
 CREATE TRIGGER update_timestamp
@@ -160,6 +154,8 @@ CREATE TABLE ticket_information (
     )
   )
 );
+
+CREATE UNIQUE INDEX ticket_information_member_id_year_id ON ticket_information(member_id, year_id);
 
 DROP TRIGGER IF EXISTS update_timestamp ON ticket_information;
 CREATE TRIGGER update_timestamp
