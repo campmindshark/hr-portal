@@ -68,5 +68,6 @@ fn main() {
                     .mount("/status", status::routes())
                     .attach(middleware::RequestLogger);
 
-    rocket.launch();
+    let env = rocket.config().environment.clone();
+    rocket.attach(middleware::SecurityHeaders::new(env)).launch();
 }

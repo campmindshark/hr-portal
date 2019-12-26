@@ -16,6 +16,7 @@ impl Fairing for RequestLogger {
         let config = rocket.config();
         let addr = format!("http://[{}]:{}", &config.address, &config.port);
         info!("Service is running on: {}", addr);
+        info!("Currently running environment: {}", &config.environment);
 
         info!("Service has the following routes configured:");
         for route in rocket.routes() {
