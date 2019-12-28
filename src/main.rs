@@ -3,9 +3,14 @@
 #[macro_use]
 extern crate diesel;
 
+mod app;
+mod authentication;
 mod db;
+mod middleware;
+mod status;
 
 use log::info;
+use rocket_contrib::serve::{Options, StaticFiles};
 
 fn configure_logging() -> Result<(), fern::InitError> {
     fern::Dispatch::new()
@@ -49,10 +54,6 @@ fn version_dump() {
     }
 }
 
-mod authentication;
-mod middleware;
-mod status;
-
 fn main() {
     dotenv::dotenv().ok();
 
@@ -66,6 +67,9 @@ fn main() {
     let rocket = rocket::ignite()
                     .mount("/auth", authentication::routes())
                     .mount("/status", status::routes())
+                    .mount("/", app::routes())
+                    .mount("/", StaticFiles::new("./static", Options::None))
+                    .attach(rocket_contrib::templates::Template::fairing())
                     .attach(middleware::RequestLogger);
 
     let env = rocket.config().environment.clone();
