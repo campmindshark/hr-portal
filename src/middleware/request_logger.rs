@@ -29,14 +29,13 @@ impl Fairing for RequestLogger {
     }
 
     fn on_response(&self, request: &Request<'_>, response: &mut Response) {
+        let method = request.method();
         let status = response.status();
+        let uri = request.uri().to_string();
 
         if let Some(ref route) = request.route() {
-            info!("{} => {} {}", route, status.code, status.reason)
+            info!("{} {} (handler: {}) => {} {}", method, uri, route, status.code, status.reason)
         } else {
-            let method = request.method();
-            let uri = request.uri().to_string();
-
             info!("{} {} => {} {}", method, uri, status.code, status.reason)
         }
     }
