@@ -37,20 +37,21 @@ fn configure_logging() -> Result<(), fern::InitError> {
 }
 
 fn version_dump() {
-    info!("BUILD_PROFILE: {}", env!("BUILD_PROFILE"));
-    info!("RUSTC_VERSION: {}", env!("RUSTC_VERSION"));
-    info!("RUST_TARGET: {}", env!("RUST_TARGET"));
+    info!("Service build information:");
+    info!("\tBUILD_PROFILE: {}", env!("BUILD_PROFILE"));
+    info!("\tRUSTC_VERSION: {}", env!("RUSTC_VERSION"));
+    info!("\tRUST_TARGET: {}", env!("RUST_TARGET"));
 
     if let Some(branch) = option_env!("GIT_BRANCH") {
-        info!("GIT_BRANCH: {}", branch);
+        info!("\tGIT_BRANCH: {}", branch);
     }
 
-    info!("GIT_DESCRIBE: {}", env!("GIT_DESCRIBE"));
-    info!("GIT_DIRTY: {}", env!("GIT_DIRTY"));
-    info!("GIT_REVISION: {}", env!("GIT_REVISION"));
+    info!("\tGIT_DESCRIBE: {}", env!("GIT_DESCRIBE"));
+    info!("\tGIT_DIRTY: {}", env!("GIT_DIRTY"));
+    info!("\tGIT_REVISION: {}", env!("GIT_REVISION"));
 
     if let Some(branch) = option_env!("GIT_TAG") {
-        info!("GIT_TAG: {}", branch);
+        info!("\tGIT_TAG: {}", branch);
     }
 }
 

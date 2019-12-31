@@ -21,9 +21,9 @@ impl Fairing for RequestLogger {
         info!("Service has the following routes configured:");
         for route in rocket.routes() {
             if route.rank < 0 {
-                info!("{} {}", route.method, route.uri);
+                info!("\t{} {}", route.method, route.uri);
             } else {
-                info!("{} {} [{}]", route.method, route.uri, route.rank);
+                info!("\t{} {} [{}]", route.method, route.uri, route.rank);
             }
         }
     }
